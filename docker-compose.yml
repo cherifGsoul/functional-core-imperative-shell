@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    container_name: db_fcis_cart
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_pass
+      POSTGRES_DB: cart_test

@@ -1,0 +1,11 @@
+html
+    body
+        h1 Welcome to TS functional core imperative shell POC
+        h2 Add products to cart
+        form(action="/cart" method="post")
+            each product in products
+                button(name="product" value=`${product.name}` type="submit") #{product.name}
+
+            ul
+                each cartProduct in cartProducts
+                    li #{cartProduct.product} X #{cartProduct.quantity}
