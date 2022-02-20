@@ -1,5 +1,5 @@
 import {addProduct, Cart, generateCartId, listProducts, newCart} from "../src/core";
-import {getCart, saveCart} from "../src/db";
+import { getCart, saveCart } from "../src/db";
 
 describe('db', () => {
 

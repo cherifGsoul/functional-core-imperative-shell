@@ -6,11 +6,12 @@ export type Cart = Readonly<{
 }>
 
 export type CartId = Readonly<string>;
-type Products = Readonly<Map<string, number>>;
+export type Product = Readonly<string>
+type Products = Readonly<Map<Product, number>>;
 
 export const generateCartId = (): CartId => v4();
 
-export const newCart = (id: CartId): Cart => ({ id, products: new Map<string, number>() });
+export const newCart = (id: CartId): Cart => ({ id, products: new Map<Product, number>() });
 
 export const addProduct = (product: string, cart: Cart) : Cart => {
     const { id, products } = cart;
