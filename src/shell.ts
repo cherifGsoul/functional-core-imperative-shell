@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { addProduct, Cart, listProducts, newCart } from './core';
 import { getCart, nextIdentity, saveCart } from './db';
+import { Router } from 'express';
+import {addProduct, listProducts, newCart} from "./core/functions";
+import {Cart} from "./core/types";
+
+const cartRouter: Router = Router();
 
 interface Product {
     id: string;
@@ -18,7 +22,7 @@ const products: Array<Product> = [
     }
 ];
 
-export const listCartHandler = async (request: Request, response: Response, next: NextFunction) => {
+const listCartHandler = async (request: Request, response: Response, next: NextFunction) => {
     const cartId = request.session.cartId;
     let cartProducts: Array<any> = [];
 
@@ -28,7 +32,7 @@ export const listCartHandler = async (request: Request, response: Response, next
     response.render('index', {products, cartProducts})
 };
 
-export const addProductsHandler = async (request: Request, response: Response, next: NextFunction) => {
+const addProductsHandler = async (request: Request, response: Response, next: NextFunction) => {
     let cartId = request.session.cartId;
     let cart: Cart | null = null;
     const { product } = request.body;
@@ -43,7 +47,13 @@ export const addProductsHandler = async (request: Request, response: Response, n
     if (!cart) {
         cart = await getCart(cartId);
     }
+
     cart = addProduct(product, cart)
     await saveCart(cart);
     response.redirect('/');
 };
+
+cartRouter.get('/', listCartHandler);
+cartRouter.post('/cart', addProductsHandler);
+
+export default cartRouter;

@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { addProductsHandler, listCartHandler } from './shell';
+import cartRouter from './shell';
 
 const app: Application = express();
 
@@ -23,10 +23,7 @@ declare module 'express-session' {
         cartId:  string
     }
 }
-
-app.get('/', listCartHandler);
-
-app.post('/cart', addProductsHandler);
+app.use('/', cartRouter)
 
 app.listen(3000, () => {
     console.log(`Functional Core Imperative Shell running on port 3000`)

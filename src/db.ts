@@ -1,6 +1,7 @@
-import {Cart, CartId, generateCartId, listProducts, newCart} from './core';
-import {Cart as CartModel, Prisma} from '@prisma/client';
+import { Cart as CartModel } from '@prisma/client';
 import prisma from './prisma';
+import { Cart, CartId } from './core/types';
+import { generateCartId, listProducts, newCart } from './core/functions';
 
 interface Product {
     product: string
@@ -15,7 +16,7 @@ export const saveCart = async (cart: Cart): Promise<void> => {
     await prisma.cart.upsert({ where: {id: cart.id},  create: data, update: data });
 };
 
-export const getCart = async (id: string): Promise<Cart> => {
+export const getCart = async (id: CartId): Promise<Cart> => {
     const record: CartModel | null = await prisma.cart.findUnique({where: {id}});
     if (!record) {
         new Error('Cart can not be found');

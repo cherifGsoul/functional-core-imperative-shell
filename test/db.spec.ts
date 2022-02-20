@@ -1,5 +1,6 @@
-import {addProduct, Cart, generateCartId, listProducts, newCart} from "../src/core";
+import {addProduct, generateCartId, listProducts, newCart} from "../src/core/functions";
 import { getCart, saveCart } from "../src/db";
+import {Cart} from "../src/core/types";
 
 describe('db', () => {
 

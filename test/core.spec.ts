@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import {addProduct, generateCartId, listProducts, newCart} from "../src/core";
+import { addProduct, generateCartId, listProducts, newCart } from "../src/core/functions";
 
 describe('Cart core', () => {
     it('should add products to an empty cart', () => {
