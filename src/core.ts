@@ -1,14 +1,16 @@
 import { v4 } from 'uuid';
 
-export type Cart = {
+export type Cart = Readonly<{
     id: CartId,
     products: Products
-}
+}>
 
-type CartId = string;
-type Products = Map<string, number>;
+export type CartId = Readonly<string>;
+type Products = Readonly<Map<string, number>>;
 
-export const newCart = (): Cart => ({ id: v4(), products: new Map<string, number>() });
+export const generateCartId = (): CartId => v4();
+
+export const newCart = (id: CartId): Cart => ({ id, products: new Map<string, number>() });
 
 export const addProduct = (product: string, cart: Cart) : Cart => {
     const { id, products } = cart;

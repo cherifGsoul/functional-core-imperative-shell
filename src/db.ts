@@ -1,6 +1,13 @@
-import {Cart, listProducts, newCart} from "./core";
-import {Cart as CartModel, Prisma} from "@prisma/client";
-import prisma from "./prisma";
+import {Cart, CartId, generateCartId, listProducts, newCart} from './core';
+import {Cart as CartModel, Prisma} from '@prisma/client';
+import prisma from './prisma';
+
+interface Product {
+    product: string
+    quantity: number
+}
+
+export const nextIdentity = (): CartId => generateCartId()
 
 export const saveCart = async (cart: Cart): Promise<void> => {
     const { id } = cart;
@@ -13,10 +20,9 @@ export const getCart = async (id: string): Promise<Cart> => {
     if (!record) {
         new Error('Cart can not be found');
     }
-    const cart: Cart = newCart();
-    cart.id = id;
+    const cart: Cart = newCart(id);
     const products = record?.products as Array<any>;
-    products.forEach((product: any) => {
+    products.forEach((product: Product) => {
         cart.products.set(product.product, product.quantity);
     });
     return cart;

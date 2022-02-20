@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon src/shell.ts",
+    "start:dev": "nodemon src/app.ts",
     "test": "jest",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",

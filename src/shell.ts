@@ -1,27 +1,12 @@
-import express, {Request, Response, NextFunction, Application} from 'express';
-const session = require('express-session')
-const bodyParser = require('body-parser');
-import path from "path";
-import {addProduct, Cart, listProducts, newCart} from './core';
-import {getCart, saveCart} from "./db";
-
-const app: Application = express();
-app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, '..',  'views'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.raw());
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
-app.use(session({
-    secret: 'foobarbaz',
-    resave: true,
-    saveUninitialized: false
-}));
+import { Request, Response, NextFunction } from 'express';
+import { addProduct, Cart, listProducts, newCart } from './core';
+import { getCart, nextIdentity, saveCart } from './db';
 
 interface Product {
     id: string;
     name: string;
 }
+
 const products: Array<Product> = [
     {
         id: '03de41dc-81f8-4357-87c0-ec525aca12f1',
@@ -33,13 +18,7 @@ const products: Array<Product> = [
     }
 ];
 
-declare module 'express-session' {
-    export interface SessionData {
-        cartId:  string
-    }
-}
-
-app.get('/', async (request: Request, response: Response, next: NextFunction) => {
+export const listCartHandler = async (request: Request, response: Response, next: NextFunction) => {
     const cartId = request.session.cartId;
     let cartProducts: Array<any> = [];
 
@@ -47,26 +26,24 @@ app.get('/', async (request: Request, response: Response, next: NextFunction) =>
         cartProducts = listProducts(await getCart(cartId));
     }
     response.render('index', {products, cartProducts})
-});
+};
 
-app.post('/cart', async (request: Request, response: Response, next: NextFunction) => {
+export const addProductsHandler = async (request: Request, response: Response, next: NextFunction) => {
     let cartId = request.session.cartId;
-    let cart: Cart;
-    const {product} = request.body;
+    let cart: Cart | null = null;
+    const { product } = request.body;
 
     if (!cartId) {
-        cart = newCart();
+        cart = newCart(nextIdentity());
         await saveCart(cart);
         cartId = cart.id;
         request.session.cartId = cartId;
     }
 
-    cart = await getCart(cartId);
+    if (!cart) {
+        cart = await getCart(cartId);
+    }
     cart = addProduct(product, cart)
     await saveCart(cart);
     response.redirect('/');
-});
-
-app.listen(3000, () => {
-    console.log(`Functional Core Imperative Shell running on port 3000`)
-});
+};
