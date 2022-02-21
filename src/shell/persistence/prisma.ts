@@ -1,7 +1,7 @@
 import { Cart as CartModel } from '@prisma/client';
-import prisma from './prisma';
-import { Cart, CartId } from './core/types';
-import { generateCartId, listProducts, newCart } from './core/functions';
+import { Cart, CartId } from '../../core/types';
+import { generateCartId, listProducts, newCart } from '../../core/functions';
+import { prisma } from '../../dependencies';
 
 interface Product {
     product: string

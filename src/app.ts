@@ -2,11 +2,11 @@ import express, { Application } from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import path from 'path';
-import cartRouter from './shell';
+import { cartRouter } from './shell';
 
 const app: Application = express();
 
-app.set('view engine', 'pug')
+app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '..',  'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw());
