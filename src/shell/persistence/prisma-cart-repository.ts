@@ -2,21 +2,22 @@ import { Cart as CartModel } from '@prisma/client';
 import { Cart, CartId } from '../../core/types';
 import { generateCartId, listProducts, newCart } from '../../core/functions';
 import { prisma } from '../../dependencies';
+import { GetCart, NextIdentity, SaveCart } from '../../core/cart-repository';
 
 interface Product {
     product: string
     quantity: number
 }
 
-export const nextIdentity = (): CartId => generateCartId()
+export const nextIdentity: NextIdentity = (): CartId => generateCartId()
 
-export const saveCart = async (cart: Cart): Promise<void> => {
+export const saveCart: SaveCart = async (cart: Cart): Promise<void> => {
     const { id } = cart;
-    const data = {id, products: listProducts(cart)}
+    const data = {id, products: listProducts(cart)};
     await prisma.cart.upsert({ where: {id: cart.id},  create: data, update: data });
 };
 
-export const getCart = async (id: CartId): Promise<Cart> => {
+export const getCart: GetCart = async (id: CartId): Promise<Cart> => {
     const record: CartModel | null = await prisma.cart.findUnique({where: {id}});
     if (!record) {
         new Error('Cart can not be found');

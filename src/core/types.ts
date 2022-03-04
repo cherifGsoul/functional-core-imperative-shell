@@ -13,4 +13,4 @@ export type NewCart = (id: CartId) => Cart
 
 export type AddProduct = (product: string, cart: Cart) => Cart;
 
-export type ListProducts = (cart: Cart) =>  Array<{ product: string, quantity: number }>
+export type ListProducts = (cart: Cart) =>  Array<{ product: string, quantity: number }>;

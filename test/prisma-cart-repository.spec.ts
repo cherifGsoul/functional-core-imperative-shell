@@ -1,5 +1,5 @@
 import {addProduct, generateCartId, listProducts, newCart} from "../src/core/functions";
-import { getCart, saveCart } from "../src/db";
+import { getCart, saveCart } from "../src/shell/persistence/prisma-cart-repository";
 import {Cart} from "../src/core/types";
 
 describe('db', () => {

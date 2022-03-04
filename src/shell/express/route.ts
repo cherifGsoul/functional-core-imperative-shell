@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Router } from 'express';
 import { addProduct, listProducts, newCart } from '../../core/functions';
 import { Cart } from '../../core/types';
-import { getCart, nextIdentity, saveCart } from "../persistence/prisma";
+import { getCart, nextIdentity, saveCart } from "../persistence/prisma-cart-repository";
 
 const cartRouter: Router = Router();
 
