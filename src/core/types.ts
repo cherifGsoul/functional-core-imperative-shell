@@ -1,16 +1,36 @@
-export type Cart = Readonly<{
-    id: CartId,
-    products: Products
-}>
+import { validate } from "uuid";
 
-export type CartId = Readonly<string>;
-export type Product = Readonly<string>
-type Products = Readonly<Map<Product, number>>;
+export namespace Cart {
+    export type Cart = Readonly<{
+        id: CartId.CartId,
+        products: Products
+    }>
 
-export type GenerateCartId = () => CartId
+    export type Product = Readonly<string>
+    type Products = Readonly<Map<Product, number>>;
 
-export type NewCart = (id: CartId) => Cart
+    export const newCart = (id: CartId.CartId): Cart => ({ id, products: new Map<Product, number>() });
 
-export type AddProduct = (product: string, cart: Cart) => Cart;
+    export const addProduct = (product: string, cart: Cart) : Cart => {
+        const { id, products } = cart;
+        let quantity: number = products.get(product) || 0;
+        quantity += 1;
+        products.set(product, quantity);
+        return { id, products }
+    };
 
-export type ListProducts = (cart: Cart) =>  Array<{ product: string, quantity: number }>;
+    export const listProducts = (cart: Cart): Array<{ product: string, quantity: number }> => {
+        return Array.from(cart.products, ([product, quantity]) => ({product, quantity}));
+    };
+}
+
+export namespace CartId {
+    export type CartId = Readonly<string>;
+
+    export const fromString = (s: string) => {
+        if (!validate(s)) {
+            throw Error('Invalid UUID for cart id')
+        }
+        return s;
+    }
+}
